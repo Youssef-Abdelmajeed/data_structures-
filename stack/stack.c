@@ -11,44 +11,45 @@ typedef struct node {
     
 } node_t; 
 
-node_t *head  = NULL ; 
+typedef node_t * stack_t ; 
 
-bool push (int value);
-int pop () ; 
+bool push (stack_t * stack ,int value);
+int pop (stack_t *stack) ; 
 
 int main (int argc , char*argv[]) 
 {
+    stack_t s1 = NULL;
 
-    push(5) ;
-    push(4) ; 
-    push(3) ; 
-    push(2) ; 
-    push(1) ; 
-    push(0) ; // wont happen stack over flow
+    push(&s1,5) ;
+    push(&s1,4) ; 
+    push(&s1,3) ; 
+    push(&s1,2) ; 
+    push(&s1,1) ; 
+    push(&s1,0) ; // wont happen stack over flow
 
     for(int i=0 ; i<6 ;i++)
     {
-        printf("%d " , pop()) ; 
+        printf("%d " , pop(&s1)) ; 
     }
     printf("\n") ;
     
     return 0 ; 
 }
-bool push (int value)
+bool push (stack_t * stack ,int value)
 {
     node_t * temp = malloc(sizeof(node_t)) ; // allocate memory for the new member  
     if(temp==NULL) return false ; /* Stack is full */
     temp->value = value ;
-    temp->next = head ; 
-    head = temp ;    
+    temp->next = *stack ; 
+    *stack = temp ;    
     return true ;
 }
-int pop ()
+int pop (stack_t * stack )
 {
-    if(head==NULL) return INT_MIN ;
-    node_t* temp = head ;  
+    if(*stack==NULL) return INT_MIN ;
+    node_t* temp = *stack ;  
     int result =temp->value ; 
-    head = head->next ;
+    *stack = (*stack)->next ;
     free(temp) ;
 
     return result;
