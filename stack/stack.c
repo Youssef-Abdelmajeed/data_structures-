@@ -1,5 +1,20 @@
 #include "stack.h"
 
+void initStack(stack_t * stack)
+{
+    *stack = NULL ;
+}
+
+void printStack(stack_t * stack) 
+{
+    node_t * tmp = *stack ; 
+    while (tmp!=NULL)
+    {
+        printf("%d ",tmp->value);
+        tmp = tmp->next ;
+    }
+    printf("\n") ;
+}
 bool push (stack_t * stack ,int value)
 {
     node_t * temp = malloc(sizeof(node_t)) ; /* allocate memory for the new member */ 

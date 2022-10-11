@@ -4,6 +4,8 @@
 #include <stdbool.h> 
 #include <limits.h> 
 #include <stdlib.h>
+#include <stdio.h>
+
 
 typedef struct node {
     int value ; 
@@ -11,7 +13,22 @@ typedef struct node {
     
 } node_t; 
 
+/* stack object */
 typedef node_t * stack_t ; 
+
+/**
+ * @brief initialization of stack object
+ * 
+ * @param stack address of stack object
+ */
+void initStack(stack_t * stack) ;
+
+/**
+ * @brief print all element in the stack 
+ * 
+ * @param stack address of stack object
+ */
+void printStack(stack_t * stack) ;
 
 /**
  * @brief push values into stack
@@ -38,5 +55,6 @@ int pop (stack_t *stack) ;
  * @return false otherwise 
  */
 bool deleteStack(stack_t * stack) ; 
+
 
 #endif /* STACK_H_ */
