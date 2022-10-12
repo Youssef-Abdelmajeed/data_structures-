@@ -1,119 +1,79 @@
-#include <stdbool.h> 
-#include <limits.h> 
-#include <stdlib.h>
-#include <stdio.h>
+#include "queue.h"
 
 
-typedef struct node {
-    int value ; 
-    struct node * next ; 
-    
-} node_t; 
-
-/* queue object */
-typedef struct  queue {
-    node_t *head ;     
-    node_t *tail ;
-
-}queue_t ; 
-
-/**
- * @brief initialization of queue object
- * 
- * @param q  queue object
- */
-void initQueue(queue_t *q) ; 
-
-/**
- * @brief enqueue a value 
- * 
- * @param q queue object 
- * @return true  if the enqueue happen successfuly  
- * @return false  if there is no more memory to allocate 
- */
-bool enqueue (queue_t *q,int value) ;
-
-/**
- * @brief dequeuea value
- * 
- * @param q queue object
- * @return int  INT_MIN  if the queue was empty and first member at the queue otherwise 
- */
-int dequeue (queue_t *q) ; 
-
-
-int main(int argc ,char *argv[])
-{
-    queue_t q1 ; 
-    initQueue(&q1) ; 
-    enqueue(&q1,5) ; 
-    enqueue(&q1,4) ; 
-    enqueue(&q1,3) ; 
-    enqueue(&q1,2) ; 
-    enqueue(&q1,1) ; 
-    enqueue(&q1,0) ; 
-
-    for(int i = 0 ; i<7 ; i++)
-    {
-        printf("%d ",dequeue(&q1)) ;
-    }
-
-    return 0 ;
-}
-
-void initQueue(queue_t *q) 
+void initQueue(queue_t * q)
 {
     q->head = NULL ; 
     q->tail = NULL ;
 }
 
-bool enqueue (queue_t *q,int value) 
+bool enqueue(queue_t * q , int value) 
 {
-    /* create a new member With the given value  */ 
-    node_t * tmp = malloc(sizeof(node_t)) ; 
-    if (tmp==NULL) return false  ; /* if the allocation can't happen */
-    
-    tmp ->value = value ; 
-    tmp->next = NULL ; 
+    /* allocate space for the new member in the queue */
+    node_t * new_member = (node_t *)malloc(sizeof(node_t)) ;  
 
-    /* if there is a tail */
+    /* in case if malloc can't allocate more */
+    if ( new_member == NULL) return false ;
+
+    /* fill the new member */
+    new_member ->value = value ; 
+    new_member->next = NULL ;
+
+    /* if the queue has a tail */
     if(q->tail != NULL)
     {
-        q->tail->next = tmp ; 
+        /* set the previous tail next to the new member */
+        q->tail->next = new_member ;
     }
 
-    /* set the member to be the new tail */
-    q->tail = tmp ;
+    /*set the new tail */
+    q->tail = new_member ; 
 
-    /* if the list was empty */
-    if(q->head==NULL) 
+    /*if the list was empty */
+    if(q->head ==NULL) 
     {
-        /* set the head to be the new member */
-        q->head = tmp ;
+        q->head = new_member ;
     }
+
     return true ;
 }
 
-int dequeue (queue_t *q)
+int dequeue (queue_t * q) 
 {
-    /* if the list was empty */
-    if(q->head==NULL) return INT_MIN ;  
+    /* in case of empty queue */
+    if(q->head == NULL) return EMPTY_QUEUE ;
    
-    /* get the first element at the queue */
+    /* get a copy of the member at head */
     node_t *tmp = q->head ; 
+    
+    /* get it value */
     int result = tmp->value ; 
-
-    /* set the new head to be the previous element  */
+    
+    /* set the new head to be the next node */
     q->head = q->head->next ;
- 
-   /* if the new head is null then the list is empty */
-    if (q->head ==NULL)
+
+    /* if there is no next member that means that the list is empty */
+    if(q->head==NULL)
     {
+        /* make sure the tail make sense */
         q->tail = NULL ;
     }
 
-    /* deallocate the member */
-    free(tmp) ; 
-
+    /* deallocate the first member */
+    free(tmp) ;
+    
     return result ;
+}
+
+void printQueue(queue_t *q)
+{
+    /* get copy of the head */
+    node_t * tmp = q->head;
+
+    while (tmp!= NULL)
+    {
+        printf("%d ",tmp->value) ;
+        tmp = tmp->next ;
+    }
+    printf("\n");
 }
